@@ -1,4 +1,4 @@
-EMACS=`which emacs`
+EMACS = $(shell which emacs)
 
 test:
 	$(EMACS) --version
