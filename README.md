@@ -55,7 +55,7 @@ Add `(multi "1.0.0")` to your package requires. E.g.:
 
 ## Tests
 
-Run `make test`.
+Run `./run-tests.sh`.
 
 
 ## Documentation
