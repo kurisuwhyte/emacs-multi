@@ -39,7 +39,7 @@ be defined, which will be applied if none of the branches match.
 
 ## Installation
 
-You can grab it from [marmalade](http://marmalade-repo.org/):
+You can grab it from [marmalade](http://marmalade-repo.org/) or [MELPA](http://melpa.milkbox.net/):
 
     M-x package-install multi
 
