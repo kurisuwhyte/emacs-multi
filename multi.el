@@ -2,7 +2,7 @@
 
 ;; Copyright (c) 2013 Christina Whyte <kurisu.whyte@gmail.com>
 
-;; Version: 1.0.0
+;; Version: 1.0.1
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: multimethod generic predicate dispatch
 ;; Author: Christina Whyte <kurisu.whyte@gmail.com>
@@ -32,7 +32,7 @@
 
 
 ;;; Commentary
-;;
+
 ;; See README.md (or http://github.com/wonderland/emacs-multi#readme)
 
 ;;; Code:
@@ -90,7 +90,7 @@ for the branches in a multi-method match the dispatch value."
 
 ;; Helper functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun multi/-make-multi-method (name)
-  (puthash name (make-hash-table :test 'equal :weakness 'key)
+  (puthash name (make-hash-table :test 'equal)
 	   multi/-method-branches))
 
 (defun multi/-make-multi-method-branch (name premise lambda)

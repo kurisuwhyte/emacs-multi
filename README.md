@@ -48,9 +48,9 @@ Alternatively you can just dump `multi.el` somewhere in your load path.
 
 ### Using in a package
 
-Add `(multi "1.0.0")` to your package requires. E.g.:
+Add `(multi "1.0.1")` to your package requires. E.g.:
 
-    ;; Package-Requires: ((multi "1.0.0"))
+    ;; Package-Requires: ((multi "1.0.1"))
 
 
 ## Tests
