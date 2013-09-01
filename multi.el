@@ -63,14 +63,14 @@ invoked in case none of the premises for the defined branches match.")
   `(progn
      (defun ,name (&rest args)
        (apply (multi/-dispatch-with ',name (lambda ,arguments ,@forms))
-	      args))
+        args))
      (multi/-make-multi-method ',name)))
 
 
 (defmacro defmethod (name premise arguments &rest forms)
   "Adds a branch to a previously-defined multi-method."
   `(multi/-make-multi-method-branch ',name ,premise
-				    (lambda ,arguments ,@forms)))
+            (lambda ,arguments ,@forms)))
 
 (defmacro defmethod-fallback (name arguments &rest forms)
   "Adds a fallback branch to a previously-defined multi-method.
@@ -91,11 +91,11 @@ for the branches in a multi-method match the dispatch value."
 ;; Helper functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun multi/-make-multi-method (name)
   (puthash name (make-hash-table :test 'equal)
-	   multi/-method-branches))
+     multi/-method-branches))
 
 (defun multi/-make-multi-method-branch (name premise lambda)
   (puthash premise lambda
-	   (gethash name multi/-method-branches)))
+     (gethash name multi/-method-branches)))
 
 (defun multi/-make-multi-method-fallback (name lambda)
   (puthash name lambda multi/-method-fallbacks))
@@ -103,9 +103,9 @@ for the branches in a multi-method match the dispatch value."
 (defun multi/-dispatch-with (name f)
   (lambda (&rest args)
     (let* ((premise (apply f args))
-	   (method  (gethash premise (gethash name multi/-method-branches))))
+     (method  (gethash premise (gethash name multi/-method-branches))))
       (if method (apply method args)
-	(apply (gethash name multi/-method-fallbacks) args)))))
+  (apply (gethash name multi/-method-fallbacks) args)))))
 
 
 

@@ -142,8 +142,3 @@ Feel free to ping me on [Twitter](http://twitter.com/kurisuwhyte) or
 ## Licence
 
 MIT
-
-
-
-
-
