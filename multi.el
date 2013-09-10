@@ -17,10 +17,10 @@
 ;; distribute, sublicense, and/or sell copies of the Software, and to
 ;; permit persons to whom the Software is furnished to do so, subject to
 ;; the following conditions:
-;; 
+;;
 ;; The above copyright notice and this permission notice shall be
 ;; included in all copies or substantial portions of the Software.
-;; 
+;;
 ;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 ;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 ;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -60,8 +60,12 @@ invoked in case none of the premises for the defined branches match.")
 ;; API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmacro defmulti (name arguments &rest forms)
   "Defines a new multi-method and a dispatch function."
+  (declare (doc-string 3)
+           (debug (&define name (&rest arg) [&optional stringp] def-body))
+           (indent defun))
   `(progn
      (defun ,name (&rest args)
+       ,(when (stringp (car forms)) (prog1 (car forms) (setq forms (cdr forms))))
        (apply (multi/-dispatch-with ',name (lambda ,arguments ,@forms))
         args))
      (multi/-make-multi-method ',name)))
@@ -69,6 +73,8 @@ invoked in case none of the premises for the defined branches match.")
 
 (defmacro defmethod (name premise arguments &rest forms)
   "Adds a branch to a previously-defined multi-method."
+  (declare (debug (&define name sexp (&rest arg) def-body))
+           (indent defun))
   `(multi/-make-multi-method-branch ',name ,premise
             (lambda ,arguments ,@forms)))
 
@@ -107,7 +113,12 @@ for the branches in a multi-method match the dispatch value."
       (if method (apply method args)
   (apply (gethash name multi/-method-fallbacks) args)))))
 
-
+(eval-after-load "lisp-mode"
+  '(progn
+     (font-lock-add-keywords 'emacs-lisp-mode
+                             '(("(\\(defmulti\\)\\(?:\\s-\\)+\\(\\_<.*?\\_>\\)"
+                                (1 font-lock-keyword-face)
+                                (2 font-lock-function-name-face))))))
 
 (provide 'multi)
 ;;; multi.el ends here
