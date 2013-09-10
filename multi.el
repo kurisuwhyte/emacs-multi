@@ -113,7 +113,12 @@ for the branches in a multi-method match the dispatch value."
       (if method (apply method args)
   (apply (gethash name multi/-method-fallbacks) args)))))
 
-
+(eval-after-load "lisp-mode"
+  '(progn
+     (font-lock-add-keywords 'emacs-lisp-mode
+                             '(("(\\(defmulti\\)\\(?:\\s-\\)+\\(\\_<.*?\\_>\\)"
+                                (1 font-lock-keyword-face)
+                                (2 font-lock-function-name-face))))))
 
 (provide 'multi)
 ;;; multi.el ends here
