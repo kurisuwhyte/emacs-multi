@@ -33,7 +33,7 @@
 
 ;;; Commentary
 
-;; See README.md (or http://github.com/wonderland/emacs-multi#readme)
+;; See README.md (or http://github.com/kurisuwhyte/emacs-multi#readme)
 
 ;;; Code:
 
