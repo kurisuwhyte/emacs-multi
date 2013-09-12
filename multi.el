@@ -2,7 +2,7 @@
 
 ;; Copyright (c) 2013 Christina Whyte <kurisu.whyte@gmail.com>
 
-;; Version: 1.0.1
+;; Version: 2.0.0
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: multimethod generic predicate dispatch
 ;; Author: Christina Whyte <kurisu.whyte@gmail.com>
@@ -71,14 +71,14 @@ invoked in case none of the premises for the defined branches match.")
      (multi/-make-multi-method ',name)))
 
 
-(defmacro defmethod (name premise arguments &rest forms)
+(defmacro defmulti-method (name premise arguments &rest forms)
   "Adds a branch to a previously-defined multi-method."
   (declare (debug (&define name sexp (&rest arg) def-body))
            (indent defun))
   `(multi/-make-multi-method-branch ',name ,premise
             (lambda ,arguments ,@forms)))
 
-(defmacro defmethod-fallback (name arguments &rest forms)
+(defmacro defmulti-method-fallback (name arguments &rest forms)
   "Adds a fallback branch to a previously-defined multi-method.
 
 The fallback branch will be applied if none of the premises defined
