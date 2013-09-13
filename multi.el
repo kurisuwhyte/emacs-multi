@@ -124,7 +124,7 @@ for the branches in a multi-method match the dispatch value."
 (eval-after-load "lisp-mode"
   '(progn
      (font-lock-add-keywords 'emacs-lisp-mode
-                             '(("(\\(defmulti\\)\\(?:\\s-\\)+\\(\\_<.*?\\_>\\)"
+                             '(("(\\(defmulti\\|defmulti-method\\|defmulti-method-fallback\\)\\(?:\\s-\\)+\\(\\_<.*?\\_>\\)"
                                 (1 font-lock-keyword-face)
                                 (2 font-lock-function-name-face))))))
 
