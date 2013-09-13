@@ -23,13 +23,13 @@ be defined, which will be applied if none of the branches match.
 
 (defmulti area (x &rest _) x)
 
-(defmethod area 'rect (_ w h)
+(defmulti-method area 'rect (_ w h)
   (* w h))
 
-(defmethod area 'circle (_ r)
+(defmulti-method area 'circle (_ r)
   (* float-pi (* r r)))
 
-(defmethod-fallback area (&rest _) 'oops)
+(defmulti-method-fallback area (&rest _) 'oops)
 
 (area 'rect 4 13) ;; => 52
 (area 'circle 12) ;; => 452.3893421169302
@@ -48,9 +48,9 @@ Alternatively you can just dump `multi.el` somewhere in your load path.
 
 ### Using in a package
 
-Add `(multi "1.0.1")` to your package requires. E.g.:
+Add `(multi "2.0.0")` to your package requires. E.g.:
 
-    ;; Package-Requires: ((multi "1.0.1"))
+    ;; Package-Requires: ((multi "2.0.0"))
 
 
 ## Tests
@@ -84,10 +84,10 @@ dispatch rules. A generic function is defined in the global table with
 the given name.
 
 
-### `defmethod (name premise arguments . body)`
+### `defmulti-method (name premise arguments . body)`
 
 ```hs
-macro defmethod :: (Id, a, [Id], ...Form) → Unit
+macro defmulti-method :: (Id, a, [Id], ...Form) → Unit
 ```
 
 Defines a new branch for the multi-method with the given name. The
@@ -98,10 +98,10 @@ It's an error to provide a `promise` that's already being used for some
 other branch in the same multi-method.
 
 
-### `defmethod-fallback (name arguments . body)`
+### `defmulti-method-fallback (name arguments . body)`
 
 ```hs
-macro defmethod-fallback :: (Id, [Id], ...Form) → Unit
+macro defmulti-method-fallback :: (Id, [Id], ...Form) → Unit
 ```
 
 Replaces the default branch for the multi-method. The default branch is
