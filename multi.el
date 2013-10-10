@@ -58,14 +58,14 @@ invoked in case none of the premises for the defined branches match.")
 
 
 ;;;; API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defmacro defmulti (name arguments &rest forms)
+(defmacro defmulti (name arguments &optional docstring &rest forms)
   "Defines a new multi-method and a dispatch function."
   (declare (doc-string 3)
            (debug (&define name (&rest arg) [&optional stringp] def-body))
            (indent defun))
   `(progn
      (defun ,name (&rest args)
-       ,(when (stringp (car forms)) (prog1 (car forms) (setq forms (cdr forms))))
+       ,(if (stringp docstring) docstring (prog1 nil (push docstring forms)))
        (apply (multi/-dispatch-with ',name (lambda ,arguments ,@forms))
         args))
      (multi/-make-multi-method ',name)))
