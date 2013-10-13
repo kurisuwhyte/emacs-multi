@@ -1,3 +1,13 @@
+## From 2.0.0 to 2.0.1
+
+### Minor additions
+
+ - Makes support for *docstrings* in `defmulti` more explicit for Emacs'
+   internal help commands.
+   
+ - Updates documentation to reflect such changes.
+
+
 ## From 1.0.1 to 2.0.0
 
 ### Breaking changes

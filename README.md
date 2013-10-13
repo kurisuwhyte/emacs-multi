@@ -21,7 +21,9 @@ be defined, which will be applied if none of the branches match.
 ```elisp
 (require 'multi)
 
-(defmulti area (x &rest _) x)
+(defmulti area (x &rest _) 
+  "Calculates the area of a geometric shape."
+  x)
 
 (defmulti-method area 'rect (_ w h)
   (* w h))
@@ -48,9 +50,9 @@ Alternatively you can just dump `multi.el` somewhere in your load path.
 
 ### Using in a package
 
-Add `(multi "2.0.0")` to your package requires. E.g.:
+Add `(multi "2.0.1")` to your package requires. E.g.:
 
-    ;; Package-Requires: ((multi "2.0.0"))
+    ;; Package-Requires: ((multi "2.0.1"))
 
 
 ## Tests
@@ -73,15 +75,19 @@ it's an error to define a branch that has the same expectations of an
 existing one.
 
 
-### `defmulti (name arguments . body)`
+### `defmulti (name arguments [docstring] . body)`
 
 ```hs
 macro defmulti :: (Id, [Id], ...Form) → Unit
+macro defmulti :: (Id, [Id], String, ...Form) → Unit
 ```
 
 Defines a new multi-method with the given name, and using the specified
 dispatch rules. A generic function is defined in the global table with
 the given name.
+
+As with `defun`, an optional docstring may be given after the list of
+parameter names.
 
 
 ### `defmulti-method (name premise arguments . body)`

@@ -2,7 +2,7 @@
 
 ;; Copyright (c) 2013 Christina Whyte <kurisu.whyte@gmail.com>
 
-;; Version: 2.0.0
+;; Version: 2.0.1
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: multimethod generic predicate dispatch
 ;; Author: Christina Whyte <kurisu.whyte@gmail.com>
