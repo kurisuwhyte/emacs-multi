@@ -51,7 +51,7 @@ multi-method.")
 (defvar multi/-method-fallbacks (make-hash-table)
   "A dictionary of fallbacks for each multi-method.
 
-Type: { Symbold → (A... → B) }
+Type: { Symbol → (A... → B) }
 
 This holds mappings of names to fallback method branches, which are
 invoked in case none of the premises for the defined branches match.")
