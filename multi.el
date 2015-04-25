@@ -30,13 +30,13 @@
 ;; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
-
-;;; Commentary
+;;; Commentary:
 
 ;; See README.md (or http://github.com/kurisuwhyte/emacs-multi#readme)
 
 ;;; Code:
 
+
 ;;;; State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar multi/-method-branches (make-hash-table)
   "A dictionary of dictionaries of branches.
@@ -47,7 +47,6 @@ This holds the mappings of names to a mappings of premises to lambdas,
 which allows a relatively efficient dispatching O(2) when applying the
 multi-method.")
 
-
 (defvar multi/-method-fallbacks (make-hash-table)
   "A dictionary of fallbacks for each multi-method.
 
@@ -56,61 +55,62 @@ Type: { Symbol → (A... → B) }
 This holds mappings of names to fallback method branches, which are
 invoked in case none of the premises for the defined branches match.")
 
-
+
 ;;;; API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defmacro defmulti (name arguments &optional docstring &rest forms)
-  "Defines a new multi-method and a dispatch function."
+(defmacro defmulti (name arguments &optional docstring &rest body)
+  "Define a new generic and its dispatch function.
+NAME, ARGUMENTS, DOCSTRING are as in `defun'.  BODY should return
+a value that will be compared to method premise during the method
+dispatch."
   (declare (doc-string 3)
            (debug (&define name (&rest arg) [&optional stringp] def-body))
            (indent defun))
   `(progn
      (defun ,name (&rest args)
-       ,(if (stringp docstring) docstring (prog1 nil (push docstring forms)))
-       (apply (multi/-dispatch-with ',name (lambda ,arguments ,@forms))
+       ,(if (stringp docstring) docstring (prog1 nil (push docstring body)))
+       (apply (multi/-dispatch-with ',name (lambda ,arguments ,@body))
               args))
      (multi/-make-multi-method ',name)))
 
-
-(defmacro defmulti-method (name premise arguments &rest forms)
-  "Adds a branch to a previously-defined multi-method."
+(defmacro defmulti-method (name premise arguments &rest body)
+  "Add a branch to a previously-defined multi-method.
+NAME is the name of a generic that was defined with
+`defmulti'.  PREMISE is an object that will be checked with
+`equal' for match with the value returned by dispatch function
+defined by `defmulti'.  ARGUMENTS must match the arguments of the
+generic.  BODY is executed in case the premise was match."
   (declare (debug (&define name sexp (&rest arg) def-body))
            (indent defun))
   `(multi/-make-multi-method-branch ',name ,premise
-                                    (lambda ,arguments ,@forms)))
+                                    (lambda ,arguments ,@body)))
 
-
-(defmacro defmulti-method-fallback (name arguments &rest forms)
-  "Adds a fallback branch to a previously-defined multi-method.
-
-The fallback branch will be applied if none of the premises defined
-for the branches in a multi-method match the dispatch value."
-  `(multi/-make-multi-method-fallback ',name (lambda ,arguments ,@forms)))
-
+(defmacro defmulti-method-fallback (name arguments &rest body)
+  "Add a fallback branch to a previously-defined multi-method NAME.
+The fallback branch will be applied if none of the premises
+defined for the branches in a multi-method match the dispatch
+value.  NAME, ARGUMENTS and BODY are as in `defun'."
+  `(multi/-make-multi-method-fallback ',name (lambda ,arguments ,@body)))
 
 (defun multi-remove-method (name premise)
-  "Removes the branch with the given premise from the multi-method."
+  "Remove the PREMISE branch from the multi-method NAME."
   (remhash premise (gethash name multi/-method-branches)))
 
-
 (defun multi-remove-method-fallback (name)
-  "Removes the defined fallback branch for the multi-method."
+  "Remove the fallback branch for the multi-method NAME."
   (remhash name multi/-method-fallbacks))
 
-
+
 ;;;; Helper functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun multi/-make-multi-method (name)
   (puthash name (make-hash-table :test 'equal)
            multi/-method-branches))
 
-
 (defun multi/-make-multi-method-branch (name premise lambda)
   (puthash premise lambda
            (gethash name multi/-method-branches)))
 
-
 (defun multi/-make-multi-method-fallback (name lambda)
   (puthash name lambda multi/-method-fallbacks))
-
 
 (defun multi/-dispatch-with (name f)
   (lambda (&rest args)
@@ -119,7 +119,7 @@ for the branches in a multi-method match the dispatch value."
       (if method (apply method args)
         (apply (gethash name multi/-method-fallbacks) args)))))
 
-
+
 ;;;; Emacs stuff ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (eval-after-load "lisp-mode"
   '(progn
