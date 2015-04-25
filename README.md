@@ -16,7 +16,9 @@ be defined, which will be applied if none of the branches match.
 > with Emacs 24+
 
 
-## Example
+## Examples
+
+### Dispatch on value of first argument
 
 ```elisp
 (require 'multi)
@@ -38,6 +40,19 @@ be defined, which will be applied if none of the branches match.
 (area 'sphere 12) ;; => 'oops
 ```
 
+### Dispatch on current context (major mode)
+
+```elisp
+(defmulti my-mode ()
+  "Report current major mode."
+  major-mode)
+
+(defmulti-method my-mode 'emacs-lisp-mode ()
+  (message "Hi! An old fellow is here!"))
+
+(defmulti-method my-mode 'clojure-mode ()
+  (message "Welcome! A new lisp is here!"))
+```
 
 ## Installation
 
